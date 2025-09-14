@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seal Discord Bot</title>
+    <style>
+        :root {
+            --primary-blue: #3498db;
+            --light-blue: #e7f2fa;
+            --dark-blue: #2980b9;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --success: #2ecc71;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light-blue);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            color: var(--white);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 0;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        h2 {
+            font-size: 2rem;
+            margin: 2rem 0 1rem;
+            color: var(--dark-blue);
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+            margin: 1.5rem 0 0.5rem;
+            color: var(--primary-blue);
+        }
+        
+        p {
+            margin-bottom: 1rem;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 3rem 0;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-blue);
+            color: var(--white);
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            margin: 1rem 0.5rem;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .btn:hover {
+            background-color: var(--dark-blue);
+        }
+        
+        .btn-copy {
+            background-color: var(--text-light);
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+        }
+        
+        .btn-copy:hover {
+            background-color: var(--text-dark);
+        }
+        
+        .btn-copy-all {
+            background-color: var(--success);
+            margin-top: 1rem;
+        }
+        
+        .btn-copy-all:hover {
+            background-color: #27ae60;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .feature-card {
+            background-color: var(--white);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-card h3 {
+            border-bottom: 2px solid var(--light-blue);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .command-list {
+            list-style-type: none;
+        }
+        
+        .command-list li {
+            background-color: var(--light-blue);
+            margin-bottom: 0.5rem;
+            padding: 0.8rem;
+            border-radius: 5px;
+            border-left: 4px solid var(--primary-blue);
+        }
+        
+        .api-list {
+            list-style-type: none;
+        }
+        
+        .api-list li {
+            background-color: var(--white);
+            margin-bottom: 0.8rem;
+            padding: 1rem;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            word-break: break-all;
+        }
+        
+        .api-url {
+            flex-grow: 1;
+            margin-right: 1rem;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--success);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            box-shadow: var(--shadow);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+        }
+        
+        .toast.show {
+            opacity: 1;
+        }
+        
+        @media (max-width: 768px) {
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            .api-list li {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .api-url {
+                margin-right: 0;
+                margin-bottom: 0.5rem;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Seal Discord Bot</h1>
+            <p>Your favorite discord bot jk thats my ego</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <section class="hero">
+            <h2>Powerful Discord Utility Bot</h2>
+            <p>Seal is a multi-purpose discord bot that has various purposes and commands to make sure that your discord bot use is easy.</p>
+            <a href="https://discord.com/oauth2/authorize?client_id=1409307836130787560&permissions=8&integration_type=0&scope=bot+applications.commands" class="btn">Add to Discord</a>
+            <a href="https://discord.gg/eVYjhbcyAU" class="btn">Discord Server</a>
+        </section>
+        
+        <section>
+            <h2>Roblox User Commands</h2>
+            <div class="features">
+                <div class="feature-card">
+                    <h3>User Information</h3>
+                    <ul class="command-list">
+                        <li>/user - Get detailed information about a Roblox user</li>
+                        <li>/avatar - Get a user's Roblox avatar</li>
+                        <li>/headshot - Get a user's Roblox headshot</li>
+                        <li>/names - Get a user's username history</li>
+                        <li>/currentlywearing - Fetch items a user is wearing</li>
+                        <li>/outfits - Get all outfits for a user</li>
+                        <li>/followers - Get a user's followers</li>
+                        <li>/following - Get who a user is following</li>
+                        <li>/friends - Get a user's friends</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>Group Information</h3>
+                    <ul class="command-list">
+                        <li>/group - Get detailed group information</li>
+                        <li>/groupicon - Get a group's icon/emblem</li>
+                        <li>/ownedgroups - Get groups owned by a user</li>
+                        <li>/currentgroups - Get groups a user is in</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>Miscellanous</h3>
+                    <ul class="command-list">
+                        <li>/item - Get detailed item information</li>
+                        <li>/placeinfo - Get information about a Roblox place</li>
+                        <li>/verified - Check if a user owns the verified hats</li>
+                        <li>/recentbadges - Get a user's most recently earned badges</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <section>
+            <h2>Minecraft Commands</h2>
+            <div class="features">
+                <div class="feature-card">
+                    <h3>Player Information</h3>
+                    <ul class="command-list">
+                        <li>/minecraft - Get Minecraft player information</li>
+                        <li>/minecraft_bulk - Check multiple Minecraft usernames</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <section>
+            <h2>Utility Commands</h2>
+            <div class="features">
+                <div class="feature-card">
+                    <h3>Validation</h3>
+                    <ul class="command-list">
+                        <li>/validate - Check if a username is available on Roblox</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>Investigation Tools</h3>
+                    <ul class="command-list">
+                        <li>/iplookup - Get IP address information</li>
+                        <li>/github - Get GitHub user information</li>
+                        <li>/instagram - Get Instagram user information</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>Discord Utilities</h3>
+                    <ul class="command-list">
+                        <li>/info - Get Discord user information</li>
+                        <li>/help - Show help menu</li>
+                        <li>/notes - Important information about the bot</li>
+                        <li>/timestamp - Convert ISO timestamp to Discord format</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <section>
+            <h2>APIs</h2>
+            <div class="feature-card">
+                <p>Seal uses most of these apis for commands to make them actually function:</p>
+                <button class="btn btn-copy-all" id="copyAll">Copy All APIs</button>
+                <ul class="api-list" id="apiList">
+                    <li>
+                        <span class="api-url">https://users.roblox.com/v1/users/authenticated</span>
+                        <button class="btn btn-copy" data-url="https://users.roblox.com/v1/users/authenticated">Copy</button>
+                    </li>
+                    <li>
+                        <span class="api-url">https://auth.roblox.com/v1/usernames/validate</span>
+                        <button class="btn btn-copy" data-url="https://auth.roblox.com/v1/usernames/validate">Copy</button>
+                    </li>
+                    <li>
+                        <span class="api-url">https://users.roblox.com/v1/users/{user_id}</span>
+                        <button class="btn btn-copy" data-url="https://users.roblox.com/v1/users/{user_id}">Copy</button>
+                    </li>
+                    <li>
+                        <span class="api-url">https://users.roblox.com/v1/usernames/users</span>
+                        <button class="btn btn-copy" data-url="https://users.roblox.com/v1/usernames/users">Copy</button>
+                    </li>
+                    <li>
+                        <span class="api-url">https://inventory.roblox.com/v1/users/{user_id}/items/0/{asset_id}/is-owned</span>
+                        <button class="btn btn-copy" data-url="https://inventory.roblox.com/v1/users/{user_id}/items/0/{asset_id}/is-owned">Copy</button>
+                    </li>
+                    <li>
+                        <span class="api-url">https://thumbnails.roblox.com/v1/users/avatar?userIds={user_id}</span>
+                        <button class="btn btn-copy" data-url="https://thumbnails.roblox.com/v1/users/avatar?userIds={user_id}">Copy</button>
+                    </li>
+                    <li>
+                        <span class="api-url">https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds={user_id}</span>
+                        <button class="btn btn-copy" data-url="https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds={user_id}">Copy</button>
+                    </li>
+                    <li>
+                        <span class="api-url">https://thumbnails.roblox.com/v1/groups/icons?groupIds={group_id}</span>
+                        <button class="btn btn-copy" data-url="https://thumbnails.roblox.com/v1/groups/icons?groupIds={group_id}">Copy</button>
+                    </li>
+                    <li>
+                        <span class="api-url">https://thumbnails.roblox.com/v1/assets?assetIds={asset_id}</span>
+                        <button class="btn btn-copy" data-url="https://thumbnails.roblox.com/v1/assets?assetIds={asset_id}">Copy</button>
+                    </li>
+                    <li>
+                        <span class="api-url">https://groups.roblox.com/v1/users/{user_id}/groups/roles</span>
+                        <button class="btn btn-copy" data-url="https://groups.roblox.com/v1/users/{user_id}/groups/roles">Copy</button>
+                    </li>
+                    <li>
+                        <span class="api-url">https://groups.roblox.com/v1/groups/search?keyword={keyword}</span>
+                        <button class="btn btn-copy" data-url="https://groups.roblox.com/v1/groups/search?keyword={keyword}">Copy</button>
+                    </li>
+                    <li>
+                        <span class="api-url">https://groups.roblox.com/v1/groups/{group_id}</span>
+                        <button class="btn btn-copy" data-url="https://groups.roblox.com/v1/groups/{group_id}">Copy</button>
+                    </li>
+                    <li>
+                        <span class="api-url">https://groups.roblox.com/v1/groups/{group_id}/users</span>
+                        <button class="btn btn-copy" data-url="https://groups.roblox.com/v1/groups/{group_id}/users">Copy</button>
+                    </li>
+                    <li>
+                        <span class="api-url">https://premiumfeatures.roblox.com/v1/users/{user_id}/validate-membership</span>
+                        <button class="btn btn-copy" data-url="https://premiumfeatures.roblox.com/v1/users/{user_id}/validate-membership">Copy</button>
+                    </li>
+                    <li>
+                        <span class="api-url">https://presence.roblox.com/v1/presence/users</span>
+                        <button class="btn btn-copy" data-url="https://presence.roblox.com/v1/presence/users">Copy</button>
+                    </li>
+                    <li>
+                        <span class="api-url">https://friends.roblox.com/v1/users/{user_id}/friends/count</span>
+                        <button class="btn btn-copy" data-url="https://friends.roblox.com/v1/users/{user_id}/friends/count">Copy</button>
+                    </li>
+                    <li>
+                        <span class="api-url">https://friends.roblox.com/v1/users/{user_id}/followers/count</span>
+                        <button class="btn btn-copy" data-url="https://friends.roblox.com/v1/users/{user_id}/followers/count">Copy</button>
+                    </li>
+                    <li>
+                        <span class="api-url">https://friends.roblox.com/v1/users/{user_id}/followings/count</span>
+                        <button class="btn btn-copy" data-url="https://friends.roblox.com/v1/users/{user_id}/followings/count">Copy</button>
+                    </li>
+                    <li>
+                        <span class="api-url">https://friends.roblox.com/v1/users/{user_id}/friends</span>
+                        <button class="btn btn-copy" data-url="https://friends.roblox.com/v1/users/{user_id}/friends">Copy</button>
+                    </li>
+                    <li>
+                        <span class="api-url">https://friends.roblox.com/v1/users/{user_id}/followers</span>
+                        <button class="btn btn-copy" data-url="https://friends.roblox.com/v1/users/{user_id}/followers">Copy</button>
+                    </li>
+                    <li>
+                        <span class="api-url">https://friends.roblox.com/v1/users/{user_id}/followings</span>
+                        <button class="btn btn-copy" data-url="https://friends.roblox.com/v1/users/{user_id}/followings">Copy</button>
+                    </li>
+                    <li>
+                        <span class="api-url">https://games.roblox.com/v1/games?universeIds={universe_id}</span>
+                        <button class="btn btn-copy" data-url="https://games.roblox.com/v1/games?universeIds={universe_id}">Copy</button>
+                    </li>
+                    <li>
+                        <span class="api-url">https://games.roblox.com/v2/users/{user_id}/games</span>
+                        <button class="btn btn-copy" data-url="https://games.roblox.com/v2/users/{user_id}/games">Copy</button>
+                    </li>
+                    <li>
+                        <span class="api-url">https://catalog.roblox.com/v1/catalog/items/{item_id}/details</span>
+                        <button class="btn btn-copy" data-url="https://catalog.roblox.com/v1/catalog/items/{item_id}/details">Copy</button>
+                    </li>
+                    <li>
+                        <span class="api-url">https://avatar.roblox.com/v1/users/{user_id}/currently-wearing</span>
+                        <button class="btn btn-copy" data-url="https://avatar.roblox.com/v1/users/{user_id}/currently-wearing">Copy</button>
+                    </li>
+                    <li>
+                        <span class="api-url">https://avatar.roblox.com/v1/users/{user_id}/outfits</span>
+                        <button class="btn btn-copy" data-url="https://avatar.roblox.com/v1/users/{user_id}/outfits">Copy</button>
+                    </li>
+                    <li>
+                        <span class="api-url">https://badges.roblox.com/v1/users/{user_id}/badges</span>
+                        <button class="btn btn-copy" data-url="https://badges.roblox.com/v1/users/{user_id}/badges">Copy</button>
+                    </li>
+                    <li>
+                        <span class="api-url">https://badges.roblox.com/v1/users/{user_id}/badges/awarded-dates</span>
+                        <button class="btn btn-copy" data-url="https://badges.roblox.com/v1/users/{user_id}/badges/awarded-dates">Copy</button>
+                    </li>
+                    <li>
+                        <span class="api-url">https://economy.roblox.com/v2/assets/{asset_id}/details</span>
+                        <button class="btn btn-copy" data-url="https://economy.roblox.com/v2/assets/{asset_id}/details">Copy</button>
+                    </li>
+                    <li>
+                        <span class="api-url">https://apis.roblox.com/universes/v1/places/{place_id}/universe</span>
+                        <button class="btn btn-copy" data-url="https://apis.roblox.com/universes/v1/places/{place_id}/universe">Copy</button>
+                    </li>
+                    <li>
+                        <span class="api-url">https://www.rolimons.com/player/{user_id}</span>
+                        <button class="btn btn-copy" data-url="https://www.rolimons.com/player/{user_id}">Copy</button>
+                    </li>
+                    <li>
+                        <span class="api-url">https://api.rolimons.com/players/v1/playerinfo/{user_id}</span>
+                        <button class="btn btn-copy" data-url="https://api.rolimons.com/players/v1/playerinfo/{user_id}">Copy</button>
+                    </li>
+                </ul>
+            </div>
+        </section>
+    </div>
+    
+    <div class="toast" id="toast">API URL copied to clipboard</div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const copyButtons = document.querySelectorAll('.btn-copy');
+            const toast = document.getElementById('toast');
+            
+            copyButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const url = this.getAttribute('data-url');
+                    copyToClipboard(url);
+                    showToast();
+                });
+            });
+            
+            const copyAllButton = document.getElementById('copyAll');
+            copyAllButton.addEventListener('click', function() {
+                const apiUrls = Array.from(document.querySelectorAll('.api-url'))
+                    .map(el => el.textContent)
+                    .join('\n');
+                
+                copyToClipboard(apiUrls);
+                showToast('All API URLs copied to clipboard');
+            });
+            
+            function copyToClipboard(text) {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+            }
+            
+            function showToast(message = 'API URL copied to clipboard') {
+                toast.textContent = message;
+                toast.classList.add('show');
+                
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>
